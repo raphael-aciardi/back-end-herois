@@ -5,4 +5,4 @@ const config = {
   processName: process.env.NOME_PROCESSO,
   timeout: 60 * 60 * 1000,
 };
-export default config;
+module.exports = config;

@@ -15,44 +15,44 @@ class RequestStatus {
     return UNAUTHORIZED_STATUS;
   }
 
-   BAD_REQUEST() {
+  BAD_REQUEST() {
     return BAD_REQUEST_STATUS;
   }
 
-   OK() {
+  OK() {
     return OK_STATUS;
   }
 
-   UNPROCESSABLE_ENTITY() {
+  UNPROCESSABLE_ENTITY() {
     return UNPROCESSABLE_ENTITY_STATUS;
   }
 
-   INTERNAL_SERVER_ERROR() {
+  INTERNAL_SERVER_ERROR() {
     return INTERNAL_SERVER_ERROR_STATUS;
   }
 
-   FORBIDDEN() {
+  FORBIDDEN() {
     return FORBIDDEN_STATUS;
   }
 
-   NOT_FOUND() {
+  NOT_FOUND() {
     return NOT_FOUND_STATUS;
   }
 
-   NOT_ACCEPTABLE() {
+  NOT_ACCEPTABLE() {
     return NOT_ACCEPTABLE;
   }
 
-   NOT_MODIFIED() {
+  NOT_MODIFIED() {
     return NOT_MODIFIED_STATUS;
   }
 
-   CONFLICT() {
+  CONFLICT() {
     return CONFLICT;
   }
 
-   CREATED_STATUS() {
+  CREATED_STATUS() {
     return CREATED_STATUS;
   }
 }
-export default new RequestStatus();
+module.exports = new RequestStatus();

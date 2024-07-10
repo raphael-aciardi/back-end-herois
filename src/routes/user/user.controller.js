@@ -1,7 +1,7 @@
 const db = require('../../classes/mysql');
 const requestStatus = require('../../utils/requestStatus');
 
-export const loginApp = async (req, res) => {
+exports.loginApp = async (req, res) => {
   try {
     const {cpf, senha} = req.body;
 

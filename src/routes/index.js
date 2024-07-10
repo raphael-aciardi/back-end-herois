@@ -11,4 +11,4 @@ const router = app => {
   });
 };
 
-export default router;
+module.exports = router;

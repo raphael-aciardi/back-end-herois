@@ -57,4 +57,4 @@ class FileSystem {
   }
 }
 
-export default new FileSystem();
+module.exports = new FileSystem();

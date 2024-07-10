@@ -51,4 +51,4 @@ class db {
     }
   }
 }
-export default new db();
+module.exports = new db();
