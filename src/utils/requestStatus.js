@@ -1,0 +1,58 @@
+const OK_STATUS = 200;
+const CREATED_STATUS = 201;
+const BAD_REQUEST_STATUS = 400;
+const UNAUTHORIZED_STATUS = 401;
+const FORBIDDEN_STATUS = 403;
+const NOT_FOUND_STATUS = 404;
+const NOT_ACCEPTABLE = 406;
+const CONFLICT = 409;
+const UNPROCESSABLE_ENTITY_STATUS = 422;
+const INTERNAL_SERVER_ERROR_STATUS = 500;
+const NOT_MODIFIED_STATUS = 304;
+
+class RequestStatus {
+  UNAUTHORIZED() {
+    return UNAUTHORIZED_STATUS;
+  }
+
+   BAD_REQUEST() {
+    return BAD_REQUEST_STATUS;
+  }
+
+   OK() {
+    return OK_STATUS;
+  }
+
+   UNPROCESSABLE_ENTITY() {
+    return UNPROCESSABLE_ENTITY_STATUS;
+  }
+
+   INTERNAL_SERVER_ERROR() {
+    return INTERNAL_SERVER_ERROR_STATUS;
+  }
+
+   FORBIDDEN() {
+    return FORBIDDEN_STATUS;
+  }
+
+   NOT_FOUND() {
+    return NOT_FOUND_STATUS;
+  }
+
+   NOT_ACCEPTABLE() {
+    return NOT_ACCEPTABLE;
+  }
+
+   NOT_MODIFIED() {
+    return NOT_MODIFIED_STATUS;
+  }
+
+   CONFLICT() {
+    return CONFLICT;
+  }
+
+   CREATED_STATUS() {
+    return CREATED_STATUS;
+  }
+}
+export default new RequestStatus();
