@@ -1,29 +1,25 @@
 {
   "name": "api_padrao_dev12br",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "index.js",
   "description": "Api base da DEV12BR",
   "license": "MIT",
   "author": "Leonardo Rodrigues",
   "scripts": {
-    "dev": "nodemon index.ts",
-    "start": "node ./dist/index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.17.1",
-    "https": "^1.0.0",
     "lodash": "^4.17.21",
-    "md5": "^2.3.0",
     "mysql": "^2.18.1",
-    "nodemailer": "^6.5.0",
-    "nodemon": "^2.0.7",
     "pm2": "^5.2.2"
   },
   "devDependencies": {
     "eslint-config-prettier": "^8.8.0",
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.1.4"
   }
 }
