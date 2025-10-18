@@ -3,5 +3,6 @@ const controller = require('./user.controller'); // deve estar correto
 const userRouter = express.Router();
 
 userRouter.post('/login', controller.loginApp); // agora deve funcionar
+userRouter.post('/create', controller.createUser);
 
 module.exports = userRouter;
