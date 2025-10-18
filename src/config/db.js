@@ -1,8 +1,24 @@
-const configDb = {
-  connectionLimit: 5,
-  host: process.env.HOST, // O host do banco. Ex: localhost
-  user: process.env.USER_DATABASE, // Um usuário do banco. Ex: user
-  password: process.env.PASSWORD_DATABASE, // A senha do usuário. Ex: user123
-  database: process.env.DATABASE, // A base de dados a qual a aplicação irá se conectar, deve ser a mesma onde foi executado o Código 1. Ex: node_mysql
-};
-module.exports = configDb;
+const sqlite3 = require('sqlite3').verbose();
+const config = require('./config'); // ajustado se está em src/config/
+
+console.log('DB Path:', config.dbPath); // <- adicione este log
+
+const db = new sqlite3.Database(config.dbPath, err => {
+  if (err) {
+    console.error('Erro ao abrir o banco SQLite:', err.message);
+  } else {
+    console.log(`Conectado ao banco SQLite em: ${config.dbPath}`);
+  }
+});
+
+db.serialize(() => {
+  db.run(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE
+    )
+  `);
+});
+
+module.exports = db;

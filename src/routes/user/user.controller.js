@@ -1,17 +1,15 @@
-const db = require('../../classes/mysql');
-const requestStatus = require('../../utils/requestStatus');
+const db = require('../../config/db');
 
-exports.loginApp = async (req, res) => {
-  try {
-    const {cpf, senha} = req.body;
+const loginApp = (req, res) => {
+  const {email} = req.body;
+  if (!email) return res.status(400).json({error: 'Email é obrigatório'});
 
-    const {results, error} = await db.query(`SELECT * FROM usuarios`);
+  db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+    if (err) return res.status(500).json({error: err.message});
+    if (!row) return res.status(404).json({error: 'Usuário não encontrado'});
 
-    if (await db.handleError(error, res, 'Erro ao tentar buscar no banco')) {
-      return res.status(requestStatus.OK()).json(results);
-    }
-  } catch (error) {
-    console.log(error);
-    return res.status(requestStatus.BAD_REQUEST()).json(error);
-  }
+    res.json({data: row});
+  });
 };
+
+module.exports = {loginApp};
