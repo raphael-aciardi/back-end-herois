@@ -6,7 +6,6 @@ const cors = require('cors');
 const pm2 = require('pm2');
 const config = require('./src/config/config');
 const router = require('./src/routes');
-const db = require('./src/config/db'); // ✅ nova importação (SQLite)
 
 const app = express();
 

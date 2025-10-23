@@ -1,9 +1,9 @@
+require('dotenv').config();
 const db = require('../../config/db');
+const jwt = require('jsonwebtoken');
 
 const loginApp = (req, res) => {
   const {email} = req.body;
-
-  console.log('bateu');
 
   if (!email) return res.status(400).json({error: 'Email é obrigatório'});
 
@@ -11,7 +11,11 @@ const loginApp = (req, res) => {
     if (err) return res.status(500).json({error: err.message});
     if (!row) return res.status(404).json({error: 'Usuário não encontrado'});
 
-    res.json({data: row});
+    const token = jwt.sign({id: row.id}, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+
+    res.json({data: row, jwt: token});
   });
 };
 
@@ -32,4 +36,13 @@ const createUser = (req, res) => {
   );
 };
 
-module.exports = {loginApp, createUser};
+const userInformation = (req, res) => {
+  const {id} = req.params;
+  db.get('SELECT * FROM users WHERE id = ?', [id], (err, row) => {
+    if (err) return res.status(500).json({error: err.message});
+    if (!row) return res.status(404).json({error: 'Usuário nao encontrado'});
+    res.json({data: row});
+  });
+};
+
+module.exports = {loginApp, createUser, userInformation};
