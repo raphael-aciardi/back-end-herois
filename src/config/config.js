@@ -6,7 +6,7 @@ const config = {
   timer: process.env.TIMER || 1562271258,
   processName: process.env.NOME_PROCESSO || 'default-process',
   timeout: 60 * 60 * 1000,
-  dbPath: process.env.DB_PATH || './database.db', // <- essencial
+  dbPath: process.env.DB_PATH || './database.db',
 };
 
 module.exports = config;
