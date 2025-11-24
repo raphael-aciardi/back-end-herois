@@ -2,17 +2,31 @@ require('dotenv').config();
 const db = require('../../config/db');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const z = require('zod');
 
 const loginApp = (req, res) => {
-  const {email, password} = req.body;
+  const parseResult = loginSchema.safeParse(req.body);
 
-  if (!email) return res.status(400).json({error: 'Email é obrigatório'});
+  const loginSchema = z.object({
+    email: z.email('Email inválido'),
+    password: z.string().min(1, 'Senha é obrigatória'),
+  });
+
+  if (!parseResult.success) {
+    return res.status(400).json({
+      error: parseResult.error.errors[0].message,
+    });
+  }
+
+  const {email, password} = parseResult.data;
 
   db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
     if (err) return res.status(500).json({error: err.message});
     if (!row) return res.status(404).json({error: 'Usuário não encontrado'});
 
-    if (!bcrypt.compareSync(password, row.password)) {
+    const passwordMatch = bcrypt.compareSync(password, row.password);
+
+    if (!passwordMatch) {
       return res.status(401).json({error: 'Senha incorreta'});
     }
 
@@ -20,27 +34,50 @@ const loginApp = (req, res) => {
       expiresIn: '1h',
     });
 
-    res.json({data: row, jwt: token});
+    res.json({success: true, jwt: token});
   });
 };
 
 const createUser = (req, res) => {
-  const {name, email, password} = req.body;
+  const result = createUserSchema.safeParse(req.body);
 
-  if (!name) return res.status(400).json({error: 'Name is required'});
-  if (!email) return res.status(400).json({error: 'Email is required'});
-  if (!password) return res.status(400).json({error: 'Password is required'});
+  const createUserSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.email('Invalid email'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+  });
 
-  const passwordHash = bcrypt.hashSync(password, 10);
+  if (!result.success) {
+    return res.status(400).json({
+      error: result.error.errors[0].message,
+    });
+  }
 
-  db.run(
-    'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
-    [name, email, passwordHash],
-    function (err) {
-      if (err) return res.status(500).json({error: err.message});
-      res.status(201).json({id: this.lastID});
-    },
-  );
+  const {name, email, password} = result.data;
+
+  db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+    if (err) return res.status(500).json({error: err.message});
+
+    if (row) {
+      return res.status(400).json({error: 'Email already exists'});
+    }
+
+    const passwordHash = bcrypt.hashSync(password, 10);
+
+    db.run(
+      'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+      [name, email, passwordHash],
+      function (err) {
+        if (err) return res.status(500).json({error: err.message});
+
+        const token = jwt.sign({id: this.lastID}, process.env.JWT_SECRET, {
+          expiresIn: '1h',
+        });
+
+        res.json({success: true, jwt: token});
+      },
+    );
+  });
 };
 
 const userInformation = (req, res) => {
