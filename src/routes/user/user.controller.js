@@ -34,7 +34,15 @@ const loginApp = (req, res) => {
       expiresIn: '1h',
     });
 
-    res.json({success: true, jwt: token});
+    const refreshToken = jwt.sign(
+      {id: row.id},
+      process.env.JWT_REFRESH_SECRET,
+      {
+        expiresIn: '7d',
+      },
+    );
+
+    res.json({success: true, jwt: token, jwtRefresh: refreshToken});
   });
 };
 
@@ -74,7 +82,15 @@ const createUser = (req, res) => {
           expiresIn: '1h',
         });
 
-        res.json({success: true, jwt: token});
+        const refreshToken = jwt.sign(
+          {id: row.id},
+          process.env.JWT_REFRESH_SECRET,
+          {
+            expiresIn: '7d',
+          },
+        );
+
+        res.json({success: true, jwt: token, jwtRefresh: refreshToken});
       },
     );
   });
@@ -88,5 +104,21 @@ const userInformation = (req, res) => {
     res.json({data: row});
   });
 };
+
+// const refreshToken = (req, res) => {
+//   const {token} = req.body;
+
+//   if (!token) return res.status(400).json({error: 'Refresh token ausente'});
+
+//   jwt.verify(token, process.env.JWT_REFRESH_SECRET, (err, decoded) => {
+//     if (err) return res.status(401).json({error: 'Refresh token inválido'});
+
+//     const newAccessToken = jwt.sign({id: decoded.id}, process.env.JWT_SECRET, {
+//       expiresIn: '15m',
+//     });
+
+//     res.json({accessToken: newAccessToken});
+//   });
+// };
 
 module.exports = {loginApp, createUser, userInformation};
