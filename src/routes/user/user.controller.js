@@ -48,7 +48,7 @@ const createUser = (req, res) => {
 
   if (!result.success) {
     return res.status(400).json({
-      error: parseResult.error.issues[0].message,
+      error: result.error.issues[0].message,
     });
   }
 
